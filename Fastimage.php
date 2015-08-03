@@ -28,7 +28,7 @@ class FastImage
 	{
 		if ($this->handle) $this->close();
 		
-		$this->handle = fopen($uri, 'r');
+		$this->handle = fopen($uri, 'rb');
 	}
 
 
