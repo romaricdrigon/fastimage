@@ -18,9 +18,8 @@ class FastImage
     private $type;
     private $handle;
 
-    public function __construct($uri = null)
+    public function __construct()
     {
-        if ($uri) $this->load($uri);
     }
 
     /**
