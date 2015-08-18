@@ -1,0 +1,12 @@
+{
+    "name": "romaricdrigon/fastimage",
+    "description": "Finds the size and type of a remote image by fetching as little as needed. PHP port of Ruby fastImage.",
+    "homepage": "https://github.com/romaricdrigon/fastimage",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {"FastImage\\": ""}
+    },
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
