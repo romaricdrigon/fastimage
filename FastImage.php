@@ -2,16 +2,16 @@
 
 /**
  * FastImage - Because sometimes you just want the size!
- * Based on the Ruby Implementation by Steven Sykes (https://github.com/sdsykes/fastimage)
+ * Based on the Ruby Implementation by Steven Sykes (https://github.com/sdsykes/fastimage).
  *
  * Copyright (c) 2012 Tom Moor
  * Tom Moor, http://tommoor.com
  *
  * MIT Licensed
+ *
  * @version 0.1
  */
-
-class FastImage
+class Fastimage
 {
     private $strpos = 0;
     private $str;
@@ -29,10 +29,10 @@ class FastImage
     public function __construct(array $headers = null)
     {
         $options = ['http' => [
-            'method'    => 'GET'
+            'method'    => 'GET',
         ]];
 
-        if (! $headers) {
+        if (!$headers) {
             $options['http']['header'] = implode("\r\n", $headers);
         }
 
@@ -41,22 +41,23 @@ class FastImage
 
     /**
      * @param string $uri
+     *
      * @throws Exception if fopen() fails
      */
     public function load($uri)
     {
-        if ($this->handle) $this->close();
+        if ($this->handle) {
+            $this->close();
+        }
 
-        if (! $this->handle = @fopen($uri, 'rb', false, $this->context)) {
+        if (!$this->handle = @fopen($uri, 'rb', false, $this->context)) {
             throw new \Exception(sprintf('An error occurred while running fopen()'));
         }
     }
 
-
     public function close()
     {
-        if ($this->handle)
-        {
+        if ($this->handle) {
             fclose($this->handle);
             $this->handle = null;
             $this->type = null;
@@ -64,36 +65,31 @@ class FastImage
         }
     }
 
-
     public function getSize()
     {
         $this->strpos = 0;
-        if ($this->getType())
-        {
+        if ($this->getType()) {
             return array_values($this->parseSize());
         }
 
         return false;
     }
 
-
     public function getType()
     {
         $this->strpos = 0;
 
-        if (!$this->type)
-        {
-            switch ($this->getChars(2))
-            {
-                case "BM":
+        if (!$this->type) {
+            switch ($this->getChars(2)) {
+                case 'BM':
                     return $this->type = 'bmp';
-                case "GI":
+                case 'GI':
                     return $this->type = 'gif';
                 case chr(0xFF).chr(0xd8):
                     return $this->type = 'jpeg';
                 case chr(0x89).'P':
                     return $this->type = 'png';
-                case "RI":
+                case 'RI':
                     return $this->type = 'webp';
                 default:
                     return false;
@@ -103,13 +99,11 @@ class FastImage
         return $this->type;
     }
 
-
     private function parseSize()
     {
         $this->strpos = 0;
 
-        switch ($this->type)
-        {
+        switch ($this->type) {
             case 'png':
                 return $this->parseSizeForPNG();
             case 'gif':
@@ -122,25 +116,22 @@ class FastImage
                 return $this->parseSizeForWEBP();
         }
 
-        return null;
+        return;
     }
-
 
     private function parseSizeForPNG()
     {
         $chars = $this->getChars(25);
 
-        return unpack("N*", substr($chars, 16, 8));
+        return unpack('N*', substr($chars, 16, 8));
     }
-
 
     private function parseSizeForGIF()
     {
         $chars = $this->getChars(11);
 
-        return unpack("S*", substr($chars, 6, 4));
+        return unpack('S*', substr($chars, 6, 4));
     }
-
 
     private function parseSizeForBMP()
     {
@@ -151,16 +142,13 @@ class FastImage
         return (reset($type) == 40) ? unpack('L*', substr($chars, 4)) : unpack('L*', substr($chars, 4, 8));
     }
 
-
     private function parseSizeForJPEG()
     {
         $state = null;
         $i = 0;
 
-        while (true)
-        {
-            switch ($state)
-            {
+        while (true) {
+            switch ($state) {
                 default:
                     $this->getChars(2);
                     $state = 'started';
@@ -168,27 +156,22 @@ class FastImage
 
                 case 'started':
                     $b = $this->getByte();
-                    if ($b === false) return false;
+                    if ($b === false) {
+                        return false;
+                    }
 
                     $state = $b == 0xFF ? 'sof' : 'started';
                     break;
 
                 case 'sof':
                     $b = $this->getByte();
-                    if (in_array($b, range(0xe0, 0xef)))
-                    {
+                    if (in_array($b, range(0xe0, 0xef))) {
                         $state = 'skipframe';
-                    }
-                    elseif (in_array($b, array_merge(range(0xC0,0xC3), range(0xC5,0xC7), range(0xC9,0xCB), range(0xCD,0xCF))))
-                    {
+                    } elseif (in_array($b, array_merge(range(0xC0, 0xC3), range(0xC5, 0xC7), range(0xC9, 0xCB), range(0xCD, 0xCF)))) {
                         $state = 'readsize';
-                    }
-                    elseif ($b == 0xFF)
-                    {
+                    } elseif ($b == 0xFF) {
                         $state = 'sof';
-                    }
-                    else
-                    {
+                    } else {
                         $state = 'skipframe';
                     }
                     break;
@@ -214,7 +197,7 @@ class FastImage
     private function parseSizeForWEBP()
     {
         $chars = $this->getChars(30);
-        $result = unpack("C12/S9", $chars);
+        $result = unpack('C12/S9', $chars);
 
         return array($result['8'], $result['9']);
     }
@@ -224,21 +207,16 @@ class FastImage
         $response = null;
 
         // do we need more data?
-        if ($this->strpos + $n -1 >= strlen($this->str))
-        {
+        if ($this->strpos + $n - 1 >= strlen($this->str)) {
             $end = ($this->strpos + $n);
 
-            while (strlen($this->str) < $end && $response !== false)
-            {
+            while (strlen($this->str) < $end && $response !== false) {
                 // read more from the file handle
                 $need = $end - ftell($this->handle);
 
-                if ($response = fread($this->handle, $need))
-                {
+                if ($response = fread($this->handle, $need)) {
                     $this->str .= $response;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
             }
@@ -250,23 +228,20 @@ class FastImage
         return $result;
     }
 
-
     private function getByte()
     {
         $c = $this->getChars(1);
-        $b = unpack("C", $c);
+        $b = unpack('C', $c);
 
         return reset($b);
     }
 
-
     private function readInt($str)
     {
-        $size = unpack("C*", $str);
+        $size = unpack('C*', $str);
 
         return ($size[1] << 8) + $size[2];
     }
-
 
     public function __destruct()
     {
