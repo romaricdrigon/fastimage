@@ -6,7 +6,7 @@ This version was forked from [Tom Moor PHP port](https://github.com/tommoor/fast
 
  * usage of exceptions
  * ability to customize HTTP headers
- * composer-ready
+ * namespaced, composer-ready
 
 ## Usage
 ```php

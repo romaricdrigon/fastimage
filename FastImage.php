@@ -1,5 +1,7 @@
 <?php
 
+namespace FastImage;
+
 /**
  * FastImage - Because sometimes you just want the size!
  * Based on the Ruby Implementation by Steven Sykes (https://github.com/sdsykes/fastimage).
@@ -7,7 +9,7 @@
  *
  * MIT Licensed
  */
-class Fastimage
+class FastImage
 {
     private $strpos = 0;
     private $str;
