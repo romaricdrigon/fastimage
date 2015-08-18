@@ -18,8 +18,25 @@ class FastImage
     private $type;
     private $handle;
 
-    public function __construct()
+    /**
+     * @var
+     */
+    private $context;
+
+    /**
+     * @param array|null $headers HTTP headers such as ['Accept-language: en', '...']
+     */
+    public function __construct(array $headers = null)
     {
+        $options = ['http' => [
+            'method'    => 'GET'
+        ]];
+
+        if (! $headers) {
+            $options['http']['header'] = implode("\r\n", $headers);
+        }
+
+        $this->context = stream_context_create($options);
     }
 
     /**
@@ -30,7 +47,7 @@ class FastImage
     {
         if ($this->handle) $this->close();
 
-        if (! $this->handle = @fopen($uri, 'rb')) {
+        if (! $this->handle = @fopen($uri, 'rb', false, $this->context)) {
             throw new \Exception(sprintf('An error occurred while running fopen()'));
         }
     }
