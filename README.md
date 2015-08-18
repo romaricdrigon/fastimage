@@ -2,6 +2,11 @@
 
 FastImage finds the dimensions or filetype of a remote image file given its uri by fetching as little as needed, based on the excellent [Ruby implementation by Stephen Sykes](https://github.com/sdsykes/fastimage).
 
+This version was forked from [Tom Moor PHP port](https://github.com/tommoor/fastimage), and introduced a few changes:
+
+ * usage of exceptions
+ * ability to customize HTTP headers
+ * composer-ready
 
 ## Usage
 ```php
@@ -31,8 +36,3 @@ echo "filetype: " . $type;
 
 FastImage is released under the MIT license. It is simple and easy to understand and places almost no restrictions on what you can do with the software. [More Information](http://en.wikipedia.org/wiki/MIT_License)
 
-
-## Download
-
-Releases are available for download from
-[GitHub](http://github.com/tommoor/fastimage/downloads).
