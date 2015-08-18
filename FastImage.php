@@ -38,7 +38,7 @@ class FastImage
             'method'    => 'GET',
         ]];
 
-        if (!$headers) {
+        if ($headers) {
             $options['http']['header'] = implode("\r\n", $headers);
         }
 
