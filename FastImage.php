@@ -15,11 +15,19 @@ class Fastimage
 {
     private $strpos = 0;
     private $str;
+
+    /**
+     * @var string image type
+     */
     private $type;
+
+    /**
+     * @var resource
+     */
     private $handle;
 
     /**
-     * @var
+     * @var resource
      */
     private $context;
 
@@ -40,8 +48,9 @@ class Fastimage
     }
 
     /**
-     * @param string $uri
+     * Open a remote file
      *
+     * @param string $uri
      * @throws Exception if fopen() fails
      */
     public function load($uri)
@@ -55,19 +64,27 @@ class Fastimage
         }
     }
 
+    /**
+     * Close an open remote "file"
+     */
     public function close()
     {
         if ($this->handle) {
             fclose($this->handle);
+
             $this->handle = null;
             $this->type = null;
             $this->str = null;
         }
     }
 
+    /**
+     * @return array|false get size height, width
+     */
     public function getSize()
     {
         $this->strpos = 0;
+
         if ($this->getType()) {
             return array_values($this->parseSize());
         }
@@ -75,6 +92,9 @@ class Fastimage
         return false;
     }
 
+    /**
+     * @return string|false get image type (bmp, jpeg...)
+     */
     public function getType()
     {
         $this->strpos = 0;
