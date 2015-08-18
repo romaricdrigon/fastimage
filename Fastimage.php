@@ -23,12 +23,17 @@ class FastImage
 		if ($uri) $this->load($uri);
 	}
 
-
+	/**
+	 * @param string $uri
+	 * @throws Exception if fopen() fails
+	 */
 	public function load($uri)
 	{
 		if ($this->handle) $this->close();
-		
-		$this->handle = fopen($uri, 'rb');
+
+		if (! $this->handle = @fopen($uri, 'rb')) {
+			throw new \Exception(sprintf('An error occurred while running fopen()'));
+		}
 	}
 
 
