@@ -32,10 +32,11 @@ class FastImage
     /**
      * @param array|null $headers HTTP headers such as ['Accept-language: en', '...']
      */
-    public function __construct(array $headers = null)
+    public function __construct(string $useragent = null, array $headers = null)
     {
         $options = ['http' => [
-            'method'    => 'GET',
+            'method'     => 'GET',
+            'user_agent' => ($useragent ? $useragent : 'php:getimagesize'),
         ]];
 
         if ($headers) {
