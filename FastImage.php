@@ -36,7 +36,7 @@ class FastImage
     {
         $options = ['http' => [
             'method'     => 'GET',
-            'user_agent' => ($useragent ? $useragent : 'php:getimagesize'),
+            'user_agent' => ($useragent ?: 'php:getimagesize'),
         ]];
 
         if ($headers) {
